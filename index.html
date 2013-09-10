@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Advanced Use of IntroJS</title>
+
+		<link rel="stylesheet" href="./styles/style.css" />
+		
+		<!-- jQuery -->
+		<script type="text/javascript" src="./lib/jquery-2.0.3.min.js"></script>
+
+		<!-- Boostrap -->
+		<script type="text/javascript" src="./lib/bootstrap/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.min.css" />
+
+		<!-- Intro.js -->
+		<script type="text/javascript" src="./lib/introjs/intro.min.js"></script>
+		<link rel="stylesheet" href="./lib/introjs/introjs.min.css" />
+		<script type="text/javascript">
+		$(document).ready(function () {
+			/* 
+			 * Intro.js 
+			 */
+			function Step(element, intro, position) {
+				this.element = element;
+				this.intro = intro;
+				this.position = position;
+			}
+
+			// Initialize intro
+			var intro = introJs();
+
+			// Configure Options of intro
+			intro.setOptions({
+				nextLabel: "After &rarr;",
+				prevLabel: "&larr; Before",
+				skipLabel: "Skip",
+				doneLabel: "Done"
+			});
+
+			$('[data-action=Help]').click(function() {
+				
+				var	steps =	[
+					new Step('[data-step=welcome]', 'Welcome Bros\' it\'s time to manipulate IntroJS', 'top'),
+					new Step('[data-step=download]', 'Go dowload IntroJS if you didn\'t !'),
+					new Step('[data-step=stepbasic]', 'The next step doesn\'t exist ! ...'),
+					new Step('[data-step=stepnotexist]', '...'),
+					new Step('[data-step=stepbasic2]', '... all is ok ! :) because a little function control if an element exist or not, if is visible or not !'),
+					new Step('[data-step=stepbasic3]', 'The next div was highlight with anothers div', 'top'),
+					new Step('[data-step=stephighlight]', 'Cool !'),
+					new Step('[data-step=stepbasic4]', 'If the next div is hidden, it\'s ignored !'),
+					new Step('[data-action=Show]', 'Click to Show or not the hidden "p" the next help launching!', 'right'),
+					new Step('[data-step=hidden]', 'I\'m watching you')
+				];
+				
+				intro.setOptions({ steps : ControlDOM(steps) });
+				
+				intro.start(); 
+			});
+
+			intro.onchange(function (targetElement) {
+				if ($(targetElement).data('step') == 'stephighlight') {
+					$('.span6').addClass('secondary-highlight');
+				} else {
+					$('.span6').removeClass('secondary-highlight');
+				}
+			});
+
+			/* 
+			 * Verification if an element exist  
+			 * params[steps] : it's your list of steps that you want verify the existance and the visibility
+			 */
+			function ControlDOM(steps) {
+				var nsteps = new Array();
+				for(var i = 0; i < steps.length; i++) 
+				{
+					if($(steps[i].element).length > 0 && $(steps[i].element).is(":visible") ){
+						nsteps[nsteps.length] = steps[i];
+					}
+				}
+				return nsteps;
+			}
+
+			/* Hidden "p" */
+			$('[data-step=hidden]').hide();
+			$('[data-action=Show]').click(function() {
+				$('[data-step=hidden]').slideToggle();
+			});
+		});
+		</script>
+	</head>
+	<body>
+		<div class="container-narrow">
+
+	      <div class="masthead">
+	        <ul class="nav nav-pills pull-right">
+	          <li class="active"><a href="#">Home</a></li>
+	          <li><a href="#" data-action="Help">Help</a></li>
+	          <li><a href="#">Contact</a></li>
+	        </ul>
+	        <h3 class="muted">IntroJS Plus</h3>
+	      </div>
+
+	      <hr>
+
+	      <div class="jumbotron" data-step="welcome">
+	        <h1>Super awesome IntroJS!</h1>
+	        <p class="lead" data-step="stephighlight">How use the fabulous IntroJS lib. ? Click on "Help" !</p>
+	        <a href="http://usablica.github.io/intro.js/" class="btn btn-large btn-success" data-step="download">Download IntroJS</a>
+	      </div>
+
+	      <hr>
+
+	      <div class="row-fluid marketing" data-step="stepbasic3">
+	        <div class="span6" data-step="stepbasic">
+	          <h4>A function for checking DOM</h4>
+	          <p>Check if an element exist or not, if is visible or not, for use IntroJS with dynamic content.</p>
+
+	          <h4>Code</h4>
+	          <p>It's a sample of code to use IntroJS.</p>
+
+	          <h4 data-step="stepbasic4">Under this "h4" a "p" is hidden !</h4>
+	          <p><button data-action="Show" class="btn btn-inverse" type="button">Show the hidden "p" !</button></p>
+	          <p data-step="hidden">Oh no i'm visible !</p>
+	        </div>
+
+	        <div class="span6" data-step="stepbasic2">
+	          <h4>Subheading</h4>
+	          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+
+	          <h4>Subheading</h4>
+	          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+
+	          <h4>Subheading</h4>
+	          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+	        </div>
+	      </div>
+
+	      <hr>
+
+	      <div class="footer">
+	        <p>&copy; Company 2013</p>
+	      </div>
+
+	    </div>
+	</body>
+</html>
